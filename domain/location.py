@@ -7,17 +7,18 @@ class Coordinates:
     def __init__(self, lat: float, lon: float) -> None:
         """Проверяем, что широта и долгота в допустимых диапазонах
         и что это конечные числа (не NaN и не ±∞).
-        NaN — «Not a Number» (не число)
-        •	Это специальное значение для типа float, которое говорит:
-        «Результат вычисления не имеет смысла как число».
-        •	Возникает, когда математическая операция
-        не имеет реального результата.
-        Например:
-        import math
-         x = float("nan")
-         print(x)  # nan
-         print(math.isnan(x))  # True
+
         """
+        # NaN — «Not a Number» (не число)
+        # •	Это специальное значение для типа float, которое говорит:
+        # «Результат вычисления не имеет смысла как число».
+        # •	Возникает, когда математическая операция
+        # не имеет реального результата.
+        # Например:
+        # import math
+        #  x = float("nan")
+        #  print(x)  # nan
+        #  print(math.isnan(x))  # True
 
         # validate lat
         if not math.isfinite(lat):
@@ -34,3 +35,16 @@ class Coordinates:
         # assign only after validation
         self.lat = float(lat)
         self.lon = float(lon)
+
+    def to_dict(self):
+        # Преобразует объект  в словарь для сохранения в JSON.
+        return {"lat": self.lat, "lon": self.lon}
+
+    @classmethod
+    def from_dict(cls, data):
+        if "lat" not in data:
+            raise KeyError("lat")
+        elif "lon" not in data:
+            raise KeyError("lon")
+        else:
+            return cls(data["lat"], data["lon"])
